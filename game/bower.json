@@ -1,0 +1,21 @@
+{
+  "name": "game",
+  "main": "game.js",
+  "homepage": "https://github.com/lim-lim-lim/team-dodge",
+  "description": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.2.0",
+    "bootstrap": "~3.3.6",
+    "angular": "angularjs#~1.4.8",
+    "requirejs": "~2.1.22"
+  }
+}
