@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 
 </head>
-<body ng-controller="GameController as gamectl">
-    <h1>TEAM DODGE</h1>
-    <button id="btn-make-room" type="button" class="btn btn-default">MAKE ROOM</button>
+<!--https://docs.angularjs.org/tutorial-->
+<body ng-controller="GameController">
+    <h1>{{title}}</h1>
+    <button id="btn-make-room" type="button" class="btn btn-default" ng-click="goWatingRoom()">Open Socket</button>
     <script src="/bower_components/angular/angular.min.js"></script>
     <script src="/js/game-client.js"></script>
 </body>

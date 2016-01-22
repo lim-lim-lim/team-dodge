@@ -16,6 +16,7 @@
     "jquery": "~2.2.0",
     "bootstrap": "~3.3.6",
     "angular": "angularjs#~1.4.8",
-    "requirejs": "~2.1.22"
+    "requirejs": "~2.1.22",
+    "angular-route": "~1.4.9"
   }
 }
