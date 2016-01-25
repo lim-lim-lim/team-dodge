@@ -2,16 +2,19 @@
 <html lang="en" ng-app="Game">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Team Dodge</title>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 
 </head>
 <!--https://docs.angularjs.org/tutorial-->
-<body ng-controller="GameController">
-    <h1>{{title}}</h1>
-    <button id="btn-make-room" type="button" class="btn btn-default" ng-click="goWatingRoom()">Open Socket</button>
+<body >
+    <ng-view>
+
+    </ng-view>
     <script src="/bower_components/angular/angular.min.js"></script>
+    <script src="/bower_components/angular-route/angular-route.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/js/game-client.js"></script>
 </body>
 </html>
