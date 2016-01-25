@@ -30,14 +30,9 @@
             }
         }])
         .controller( 'Ready', [ '$scope', '$http', 'socketio', function( $scope, $http, socketio ){
-            $http( { 'method':'GET', 'url':'/getkey'}).then(
-                function( res ){
-                    var key = res.data;
-                    $scope.url = location.host + '/room/' + key;
-                    socketio.emit( 'create-room', key, function(){} );
-                    socketio.on( 'create')
-                },
-                function(){ console.log('fail') }
-            );
+            socketio.emit( 'create-room', null, function( key ){
+                console.log( key );
+                $scope.url = location.host + '/room/' + key;
+            } );
         }]);
 }();
