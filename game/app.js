@@ -24,6 +24,7 @@ app.set('view engine', 'jade');
 
 app.use('/', routes);
 app.use('/js', express.static(path.join(__dirname, 'public/javascripts')));
+app.use('/css', express.static(path.join(__dirname, 'public/stylesheets')));
 app.use('/views', express.static(path.join(__dirname, '/views')));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
