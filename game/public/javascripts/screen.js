@@ -11,10 +11,12 @@
         .controller( 'Wating', [ '$scope', '$http', 'socketio', function( $scope, $http, socketio ){
 
             $scope.users = [];
+            $scope.roomId = null;
 
-            socketio.emit( 'create-room', null, function( key ){
-                $scope.url = location.host + '/room/' + key;
-            } );
+            socketio.emit( 'create-room', null, function( roomId ){
+                $scope.url = location.host + '/room/' + roomId;
+                $scope.roomId = roomId;
+            });
 
             socketio.on( 'join-user', function( data ){
                 data.isReady = false;
@@ -26,12 +28,20 @@
             });
 
             socketio.on( 'ready-user', function( data ){
-                angular.forEach( $scope.users, function( item, index ){
+                angular.forEach( $scope.users, function( item ){
                     if( item.userName === data.userName ){
                         item.isReady = true;
                         return false;
                     }
-                } );
+                });
+
+                var isReadyList = _.filter($scope.users, function( item){
+                    return item.isReady === true;
+                });
+
+                if( isReadyList.length === $scope.users.length ){
+                    socketio.emit( 'ready-all', { roomId:$scope.roomId } );
+                }
             });
         }]);
 }( window.GlobalService );

@@ -2,17 +2,17 @@
 var app = require( './app' );
 var gameServer = app.listen( 3000 );
 var socketIO = require( 'socket.io' )( gameServer );
-var key = -1;
+var roomCount = -1;
 var socketMap = {};
 var keyPrefix = 'go-';
 
 socketIO.on( 'connection', function( socket ){
     socket.on( 'create-room', function( data, callback ){
-        var id = keyPrefix + (++key);
-        socket.id = id;
-        socket.join( id );
-        socketMap[ id ] = { screen:socket, captine:null, users:[]};
-        callback( id );
+        var roomId = keyPrefix + (++roomCount);
+        socket.id = roomId;
+        socket.join( roomId );
+        socketMap[ roomId ] = { screen:socket, captine:null, users:[]};
+        callback( roomId );
     });
 
     socket.on( 'join', function( data, callback ){

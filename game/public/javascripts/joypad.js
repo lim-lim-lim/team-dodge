@@ -49,18 +49,23 @@
 
         .controller( 'Ready', [ '$scope', function( $scope  ){
             $scope.isReady = false;
-            console.log($scope.isCaptine)
+            $scope.readyAll = false;
             $scope.ready = function(){
                 $scope.io.emit( 'ready', null, function(){
                     $scope.isReady = true;
                 });
-            }
+            };
 
             $scope.readyCancel = function(){
                 $scope.io.emit( 'ready-cancel', function(){
                     $scope.isReady = true;
                 });
-            }
+            };
+
+            $scope.io.on( 'ready-all', function(){
+                $scope.readyAll = true;
+                console.log($scope.readyAll)
+            })
         }] )
 
         .controller( 'Select', [ '$scope', function( $scope ){

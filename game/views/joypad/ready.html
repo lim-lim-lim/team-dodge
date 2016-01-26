@@ -5,4 +5,4 @@
         ng-class="{ 'btn-default':!isReady, 'btn-success':isReady }">Ready</button>
 
 <button ng-click="startup();" class="btn btn-status btn-primary"
-        ng-show="isCaptine" ng-disabled="readyAll">Start</button>
+        ng-show="isCaptine" disabled="{{readyAll}}">Start</button>
