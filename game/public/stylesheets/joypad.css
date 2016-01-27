@@ -1,45 +1,75 @@
+html, body{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+@media only screen and (orientation:portrait){
+    body{
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+}
+@media only screen and (orientation:landscape){
+    body {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+}
 
 
-.ctnr-4-way{
-    width: 250px;
-    height: 250px;
+#game-controller{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: -webkit-flex;
+    display: flex;
+}
+
+#game-controller > div{
+    position: relative;
+}
+
+#lever-container{
+    flex: 1;
+    -webkit-flex: 1;
+}
+
+#blank-container{
+    flex: 0.5;
+    -webkit-flex: 0.5;
+}
+
+#btn-container{
+    flex: 1;
+    -webkit-flex: 1;
+}
+
+#lever-bg{
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
     position: absolute;
-    top: 50%;
-    margin-top: -125px;
-    background: #EEEEEE;
+    background: #eeeeee;
+    left:50%;
+    top:50%;
+    margin-left: -90px;
+    margin-top: -90px;
 }
 
-.btn-4-way{
-    width: 50px;
-    height: 50px;
-    position: absolute;
-}
-
-.btn-4-way-r{
-    left: 50px;
-    top: 50%;
-    margin-top: -25px;
-}
-
-.btn-4-way-l{
-    left: 150px;
-    top: 50%;
-    margin-top: -25px;
-}
-
-.btn-4-way-u{
-    top: 50px;
-    left: 50%;
-    margin-left: -25px;
-}
-
-.btn-4-way-d{
-    bottom: 50px;
-    left: 50%;
-    margin-left: -25px;
-}
-
-.btn-status{
+#lever{
     width: 100px;
-    height:50px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute;
+    left:50%;
+    top:50%;
+    margin-left: -50px;
+    margin-top: -50px;
 }
