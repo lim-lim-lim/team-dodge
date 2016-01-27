@@ -5,7 +5,7 @@ router.get('/', function(req, res) {
   res.sendfile( 'views/screen/screen-container.html' );
 });
 
-router.get('/room/go:id', function(req, res) {
+router.get('/connection/key:id', function(req, res) {
   res.sendfile( 'views/joypad/joypad-container.html' );
 });
 
