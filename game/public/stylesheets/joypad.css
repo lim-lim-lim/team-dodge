@@ -4,27 +4,13 @@ html, body{
     overflow: hidden;
 }
 
-@media only screen and (orientation:portrait){
-    body{
-        -webkit-transform: rotate(90deg);
-        -moz-transform: rotate(90deg);
-        -o-transform: rotate(90deg);
-        -ms-transform: rotate(90deg);
-        transform: rotate(90deg);
-    }
-}
-@media only screen and (orientation:landscape){
-    body {
-        -webkit-transform: rotate(0deg);
-        -moz-transform: rotate(0deg);
-        -o-transform: rotate(0deg);
-        -ms-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-}
-
-
 #game-controller{
+    width: 100%;
+    height: 100%;
+    display:block;
+}
+
+#game-controller .wrapper{
     width: 100%;
     height: 100%;
     position: relative;
@@ -32,7 +18,7 @@ html, body{
     display: flex;
 }
 
-#game-controller > div{
+#game-controller  .wrapper > div{
     position: relative;
 }
 
