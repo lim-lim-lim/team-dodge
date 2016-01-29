@@ -52,9 +52,8 @@
         }] )
 
         .controller( 'GameController', [ '$scope', function( $scope ){
-
-            $scope.updateDirection = function(){
-
+            $scope.updateVector = function( radian, speed ){
+                $scope.io.emit( 'updateVector', {radian:radian, speed:speed } );
             };
 
             $scope.pushButton = function(){
@@ -72,11 +71,10 @@
                 link:function( $scope, $element, attrs, controller ){
 
                     var $document = $( document );
-                    var $lever = $element.find( '#lever' );
-                    var $leverBg = $element.find( '#lever-bg' );
+                    var $lever = $element.find( '#lever').css( {'position':'absolute', 'border-radius':'50%'} );
+                    var $leverBg = $element.find( '#lever-bg' ).css( {'position':'absolute', 'border-radius':'50%'} );
                     var $leverContainer = $element.find( '#lever-container' );
-                    var isLandscape;
-                    var vec = {}
+                    var vec = { x:0, y:0, r:0 };
 
                     initEvent();
                     updateDisplay();
@@ -84,19 +82,18 @@
                     function initEvent(){
                         window.addEventListener( 'resize', function(){
                             updateDisplay();
-                            $scope.$apply();
                         });
 
                         $lever.on( 'touchstart', function( event ){
                             event.preventDefault();
                             var startTouch = event.originalEvent.touches[0];
-                            var startTouchX = isLandscape ? startTouch.pageX : startTouch.pageY;
-                            var startTouchY = isLandscape ? startTouch.pageY : startTouch.pageX;
-                            var startElementX = isLandscape ? $lever.position().left : $lever.position().top;
-                            var startElementY = isLandscape ? $lever.position().top : $lever.position().left;
+                            var startTouchX = startTouch.pageX;
+                            var startTouchY = startTouch.pageY;
+                            var startElementX = $lever.position().left;
+                            var startElementY = $lever.position().top;
                             var initPosition = $lever.data( 'init-position' );
-                            var initPositionX = isLandscape ? initPosition.x : initPosition.y;
-                            var initPositionY = isLandscape ? initPosition.y : initPosition.x;
+                            var initPositionX = initPosition.x;
+                            var initPositionY = initPosition.y;
                             var leverSize = $lever.outerWidth();
                             var leverBgSize = $leverBg.outerWidth();
                             var limitDistance = leverBgSize/2 - ( leverSize/2 );
@@ -104,19 +101,19 @@
                             $document.on( 'touchmove', function( event ){
                                 event.preventDefault();
                                 var moveTouch = event.originalEvent.touches[0];
-                                var currentTouchX = isLandscape ? moveTouch.pageX : moveTouch.pageY;
-                                var currentTouchY = isLandscape ? moveTouch.pageY : moveTouch.pageX;
+                                var currentTouchX = moveTouch.pageX;
+                                var currentTouchY = moveTouch.pageY;
                                 var x = startElementX+( currentTouchX-startTouchX );
-                                var y = startElementY+( ( isLandscape ? currentTouchY : window.innerWidth-currentTouchY )-startTouchY );
+                                var y = startElementY+( currentTouchY-startTouchY );
                                 var xDistance = x-initPositionX;
                                 var yDistance = y-initPositionY;
                                 var radian = Math.atan2( currentTouchY-startTouchY, currentTouchX-startTouchX );
                                 if( Math.sqrt( ( xDistance * xDistance ) + ( yDistance * yDistance ) ) >= limitDistance ){
                                     x = initPositionX + limitDistance * Math.cos( radian );
-                                    y = initPositionY + ( isLandscape ? limitDistance : -limitDistance ) * Math.sin( radian );
+                                    y = initPositionY + limitDistance * Math.sin( radian );
                                 }
-                                console.log( radian );
-                                $lever.css( { 'left':x, 'top':y });
+                                chnagePosition( x, y )
+                                chnageVector( radian, 1 );
 
                             })
 
@@ -125,25 +122,34 @@
                                 $document.off( 'touchmove' );
                                 $document.off( 'touchend' );
                                 $lever.css( { 'left':initPositionX, 'top':initPositionY } );
+                                chnageVector( initPositionX, initPositionY, 0  )
+                                chnagePosition( initPositionX, initPositionY )
+                                chnageVector( 0, 0 );
                             })
                         })
+                    }
 
+                    function chnagePosition( x, y ){
+                        $lever.css( { 'left':x, 'top':y });
+                    }
 
+                    function chnageVector( radian, speed ){
+                        $scope.updateVector( radian, speed );
                     }
 
                     function updateDisplay(){
-                        if( window.innerWidth < window.innerHeight ){
-                            isLandscape = false;
-                            $element.css( { 'left':window.innerWidth, 'width':window.innerHeight, 'height':window.innerWidth, 'position':'absolute', 'transform-origin': 'left top', 'transform': 'rotate(90deg)' });
-                        }else{
-                            isLandscape = true;
-                            $element.css( { 'left':0, 'width':'100%', 'height':'100%', 'position':'relative', 'transform-origin': 'left top', 'transform': 'rotate(0deg)' });
-                        }
                         var leverContainerMinsize = Math.min( $leverContainer.width(), $leverContainer.height() );
                         var leverBgSize = leverContainerMinsize * 0.7;
                         var leverSize = leverBgSize * 0.5;
-                        $leverBg.css( { 'width': leverBgSize, 'height':leverBgSize, 'margin-left':-leverBgSize/2, 'margin-top':-leverBgSize/2 });
-                        $lever.css( {  'width': leverSize, 'height':leverSize, 'margin-left':-leverSize/2, 'margin-top':-leverSize/2 });
+                        $leverBg
+                            .css( { 'width': leverBgSize, 'height':leverBgSize } )
+                            .css( { 'left':'50%', 'top':'50%' })
+                            .css( { 'margin-left':-leverBgSize/2, 'margin-top':-leverBgSize/2 });
+                        $lever
+                            .css( { 'width': leverSize, 'height':leverSize })
+                            .css( { 'left':'50%', 'top':'50%' })
+                            .css( { 'margin-left':-leverSize/2, 'margin-top':-leverSize/2 });
+
                         var position = $lever.position();
                         $lever.data( 'init-position', {x:position.left, y:position.top} );
                     }

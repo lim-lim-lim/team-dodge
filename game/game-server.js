@@ -64,6 +64,11 @@ socketIO.on( 'connection', function( socket ){
 
     socket.on( 'startup', function(){
         socketIO.to( socket.connectionId ).emit( 'startup' );
+        var socketGroup = socketMap[ socket.connectionId ];
+        socketGroup.screen.emit( 'startup', socketGroup.users  );
+    });
+
+    socket.on( 'updateVector', function( data ){
         socketMap[ socket.connectionId ].screen.emit( 'startup'  );
     });
 });

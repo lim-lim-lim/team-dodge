@@ -38,24 +38,5 @@ html, body{
 }
 
 #lever-bg{
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    position: absolute;
     background: #eeeeee;
-    left:50%;
-    top:50%;
-    margin-left: -90px;
-    margin-top: -90px;
-}
-
-#lever{
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    position: absolute;
-    left:50%;
-    top:50%;
-    margin-left: -50px;
-    margin-top: -50px;
 }

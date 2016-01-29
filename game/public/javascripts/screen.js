@@ -45,5 +45,18 @@
 
         .controller( 'GameWorld', [ '$scope', function( $scope ){
 
-        }]);
+        }])
+
+        .directive( 'gameWorld', function(){
+            return{
+                restrict:'E',
+                transclude: true,
+                controller: 'GameController',
+                scope:true,
+                template:'<div class="wrapper" ng-transclude></div>',
+                link:function( $scope, $element, attrs, controller ){
+
+                }
+            }
+        });
 }( window.GlobalService );

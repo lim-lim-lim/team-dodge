@@ -1,1 +1,13 @@
-hello game world
+
+<game-world id="game-world" >
+    <div id="game-ui-container">
+        <ul id="user-list">
+            <li class="user-item" ng-repeat="user in userList">
+                [ {{userName}} ] | position( x:{{position.x}}, y:{{position.y}} ) | vector( dir:{{vector.radian}}, speed:{{vector.speed}} )
+            </li>
+        </ul>
+    </div>
+    <div id="game-canvas-container">
+        <canvas id="game-canvas" width="1024" height="768"></canvas>
+    </div>
+</game-world>
