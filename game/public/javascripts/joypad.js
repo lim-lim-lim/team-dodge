@@ -53,25 +53,14 @@
 
         .controller( 'GameController', [ '$scope', function( $scope ){
 
-            /*
-            var $element = angular.element( '#game-controller' );
-            //console.log( $element );
+            $scope.updateDirection = function(){
 
-            window.addEventListener( 'resize', function(){
-                updateDisplay();
-                $scope.$apply();
-            });
+            };
 
-            function updateDisplay(){
-                if( window.innerWidth > window.innerHeight ){
-                    console.log( 'land')
-                }else{
-                    console.log( 'port')
-                }
-            }
+            $scope.pushButton = function(){
 
-            updateDisplay();
-            */
+            };
+
         }])
         .directive( 'gameController', function(){
             return{
@@ -82,32 +71,85 @@
                 template:'<div class="wrapper" ng-transclude></div>',
                 link:function( $scope, $element, attrs, controller ){
 
+                    var $document = $( document );
                     var $lever = $element.find( '#lever' );
                     var $leverBg = $element.find( '#lever-bg' );
                     var $leverContainer = $element.find( '#lever-container' );
-                    window.addEventListener( 'resize', function(){
-                        updateDisplay();
-                        $scope.$apply();
-                    });
+                    var isLandscape;
+                    var vec = {}
+
+                    initEvent();
+                    updateDisplay();
+
+                    function initEvent(){
+                        window.addEventListener( 'resize', function(){
+                            updateDisplay();
+                            $scope.$apply();
+                        });
+
+                        $lever.on( 'touchstart', function( event ){
+                            event.preventDefault();
+                            var startTouch = event.originalEvent.touches[0];
+                            var startTouchX = isLandscape ? startTouch.pageX : startTouch.pageY;
+                            var startTouchY = isLandscape ? startTouch.pageY : startTouch.pageX;
+                            var startElementX = isLandscape ? $lever.position().left : $lever.position().top;
+                            var startElementY = isLandscape ? $lever.position().top : $lever.position().left;
+                            var initPosition = $lever.data( 'init-position' );
+                            var initPositionX = isLandscape ? initPosition.x : initPosition.y;
+                            var initPositionY = isLandscape ? initPosition.y : initPosition.x;
+                            var leverSize = $lever.outerWidth();
+                            var leverBgSize = $leverBg.outerWidth();
+                            var limitDistance = leverBgSize/2 - ( leverSize/2 );
+
+                            $document.on( 'touchmove', function( event ){
+                                event.preventDefault();
+                                var moveTouch = event.originalEvent.touches[0];
+                                var currentTouchX = isLandscape ? moveTouch.pageX : moveTouch.pageY;
+                                var currentTouchY = isLandscape ? moveTouch.pageY : moveTouch.pageX;
+                                var x = startElementX+( currentTouchX-startTouchX );
+                                var y = startElementY+( ( isLandscape ? currentTouchY : window.innerWidth-currentTouchY )-startTouchY );
+                                var xDistance = x-initPositionX;
+                                var yDistance = y-initPositionY;
+                                var radian = Math.atan2( currentTouchY-startTouchY, currentTouchX-startTouchX );
+                                if( Math.sqrt( ( xDistance * xDistance ) + ( yDistance * yDistance ) ) >= limitDistance ){
+                                    x = initPositionX + limitDistance * Math.cos( radian );
+                                    y = initPositionY + ( isLandscape ? limitDistance : -limitDistance ) * Math.sin( radian );
+                                }
+                                console.log( radian );
+                                $lever.css( { 'left':x, 'top':y });
+
+                            })
+
+                            $document.on( 'touchend', function( event ){
+                                event.preventDefault();
+                                $document.off( 'touchmove' );
+                                $document.off( 'touchend' );
+                                $lever.css( { 'left':initPositionX, 'top':initPositionY } );
+                            })
+                        })
+
+
+                    }
 
                     function updateDisplay(){
                         if( window.innerWidth < window.innerHeight ){
-                            $element.css( { 'top':-window.innerWidth, 'width':window.innerHeight, 'height':window.innerWidth, 'position':'absolute', 'transform-origin': 'left bottom', 'transform': 'rotate(90deg)' });
+                            isLandscape = false;
+                            $element.css( { 'left':window.innerWidth, 'width':window.innerHeight, 'height':window.innerWidth, 'position':'absolute', 'transform-origin': 'left top', 'transform': 'rotate(90deg)' });
                         }else{
-                            $element.css( { 'top':0, 'width':'100%', 'height':'100%', 'position':'relative', 'transform-origin': 'left bottom', 'transform': 'rotate(0deg)' });
+                            isLandscape = true;
+                            $element.css( { 'left':0, 'width':'100%', 'height':'100%', 'position':'relative', 'transform-origin': 'left top', 'transform': 'rotate(0deg)' });
                         }
                         var leverContainerMinsize = Math.min( $leverContainer.width(), $leverContainer.height() );
                         var leverBgSize = leverContainerMinsize * 0.7;
                         var leverSize = leverBgSize * 0.5;
                         $leverBg.css( { 'width': leverBgSize, 'height':leverBgSize, 'margin-left':-leverBgSize/2, 'margin-top':-leverBgSize/2 });
                         $lever.css( {  'width': leverSize, 'height':leverSize, 'margin-left':-leverSize/2, 'margin-top':-leverSize/2 });
+                        var position = $lever.position();
+                        $lever.data( 'init-position', {x:position.left, y:position.top} );
                     }
-
-                    updateDisplay();
                 }
             }
         });
-
 }( window.GlobalService );
 
 
