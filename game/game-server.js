@@ -65,11 +65,14 @@ socketIO.on( 'connection', function( socket ){
     socket.on( 'startup', function(){
         socketIO.to( socket.connectionId ).emit( 'startup' );
         var socketGroup = socketMap[ socket.connectionId ];
-        socketGroup.screen.emit( 'startup', socketGroup.users  );
+        var usersInfo =  socketGroup.users.map( function( item ){
+            return { id:item.id, userName:item.userName, position:{ x:0, y:0 }, vector:{ radian:0, speed:0 } };
+        });
+        socketGroup.screen.emit( 'startup', usersInfo  );
     });
 
     socket.on( 'updateVector', function( data ){
-        socketMap[ socket.connectionId ].screen.emit( 'startup'  );
+        socketMap[ socket.connectionId ].screen.emit( 'updateVector'  );
     });
 });
 
