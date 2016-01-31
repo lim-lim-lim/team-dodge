@@ -62,7 +62,7 @@
                 scope:true,
                 template:'<div class="wrapper" ng-transclude></div>',
                 link:function( $scope, $element, attrs, controller ){
-
+                    console.log( $element);
                 }
             }
         });
