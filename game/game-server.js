@@ -66,13 +66,14 @@ socketIO.on( 'connection', function( socket ){
         socketIO.to( socket.connectionId ).emit( 'startup' );
         var socketGroup = socketMap[ socket.connectionId ];
         var usersInfo =  socketGroup.users.map( function( item ){
-            return { id:item.id, userName:item.userName, position:{ x:0, y:0 }, vector:{ radian:0, speed:0 } };
+            return { id:item.id, userName:item.userName, position:{ x:0, y:0 }, vector:{ radian:0, length:0 } };
         });
         socketGroup.screen.emit( 'startup', usersInfo  );
     });
 
     socket.on( 'updateVector', function( data ){
-        socketMap[ socket.connectionId ].screen.emit( 'updateVector'  );
+        data.id = socket.id;
+        socketMap[ socket.connectionId ].screen.emit( 'updateVector', data  );
     });
 });
 

@@ -52,8 +52,8 @@
         }] )
 
         .controller( 'GameController', [ '$scope', function( $scope ){
-            $scope.updateVector = function( radian, speed ){
-                $scope.io.emit( 'updateVector', {radian:radian, speed:speed } );
+            $scope.updateVector = function( radian, length ){
+                $scope.io.emit( 'updateVector', {radian:radian, length:length } );
             };
 
             $scope.pushButton = function(){
@@ -74,7 +74,6 @@
                     var $lever = $element.find( '#lever').css( {'position':'absolute', 'border-radius':'50%'} );
                     var $leverBg = $element.find( '#lever-bg' ).css( {'position':'absolute', 'border-radius':'50%'} );
                     var $leverContainer = $element.find( '#lever-container' );
-                    var vec = { x:0, y:0, r:0 };
 
                     initEvent();
                     updateDisplay();
@@ -113,7 +112,7 @@
                                     y = initPositionY + limitDistance * Math.sin( radian );
                                 }
                                 chnagePosition( x, y )
-                                chnageVector( radian, 1 );
+                                changeVector( radian, 1 );
 
                             })
 
@@ -122,9 +121,8 @@
                                 $document.off( 'touchmove' );
                                 $document.off( 'touchend' );
                                 $lever.css( { 'left':initPositionX, 'top':initPositionY } );
-                                chnageVector( initPositionX, initPositionY, 0  )
                                 chnagePosition( initPositionX, initPositionY )
-                                chnageVector( 0, 0 );
+                                changeVector( 0, 0 );
                             })
                         })
                     }
@@ -133,8 +131,8 @@
                         $lever.css( { 'left':x, 'top':y });
                     }
 
-                    function chnageVector( radian, speed ){
-                        $scope.updateVector( radian, speed );
+                    function changeVector( radian, length ){
+                        $scope.updateVector( radian, length );
                     }
 
                     function updateDisplay(){

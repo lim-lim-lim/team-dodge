@@ -1,12 +1,12 @@
 
 <game-world id="game-world" >
     <div id="game-canvas-container">
-        <canvas id="game-canvas" width="1024" height="768"></canvas>
+        <canvas id="game-canvas" width="512" height="384"></canvas>
     </div>
     <div id="game-ui-container">
         <ul id="user-list">
             <li class="user-item" ng-repeat="user in usersInfo">
-                [ {{user.userName}} ] | position( x:{{user.position.x}}, y:{{user.position.y}} ) | vector( dir:{{user.vector.radian}}, speed:{{user.vector.speed}} )
+                [ {{user.userName}} ] |  vector( radian:{{user.vector.radian}}, length:{{user.vector.length}} )
             </li>
         </ul>
     </div>

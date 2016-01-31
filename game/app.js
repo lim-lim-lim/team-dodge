@@ -23,13 +23,11 @@ app.set('view engine', 'jade');
 //app.use(express.static(path.join(__dirname, 'bower_components')));
 
 app.use('/', routes);
+app.use('/assets',  express.static(__dirname + '/assets'));
 app.use('/js', express.static(path.join(__dirname, 'public/javascripts')));
 app.use('/css', express.static(path.join(__dirname, 'public/stylesheets')));
 app.use('/views', express.static(path.join(__dirname, '/views')));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
-
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
