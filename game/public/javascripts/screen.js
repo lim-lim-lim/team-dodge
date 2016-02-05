@@ -10,6 +10,7 @@
         }])
 
         .factory( 'socketio', GlobalService.socketio )
+        .factory( 'gameWorld', GlobalService.gameWorld )
 
         .controller( 'ScreenBase', [ '$scope', 'socketio', function( $scope, socketio ){
             $scope.io = socketio;
@@ -65,7 +66,7 @@
             });
         }])
 
-        .directive( 'gameWorld', function(){
+        .directive( 'gameWorld', ['gameWorld', function( gameWorld ){
             return{
                 restrict:'E',
                 transclude: true,
@@ -74,30 +75,10 @@
                 template:'<div class="wrapper" ng-transclude></div>',
                 link:function( $scope, $element, attrs, controller ){
                     var canvas = $element.find( '#game-canvas').get( 0 );
-                    var canvasWidth = canvas.width;
-                    var canvasHeight = canvas.height;
-                    var stage = new createjs.Stage(canvas);
-                    var usersInfo = $scope.usersInfo;
-                    var userCharacters = [];
-                    var loader;
-                    var FPS = 40;
-
+                    gameWorld.init( canvas, 1 );
+                    $scope.gameWolrd = gameWorld;
                     preload();
 
-
-                    function preload(){
-                        var manifast = [
-                            {src: "img/character-sprite01.png", id: "cs1"},
-                            {src: "img/character-sprite02.png", id: "cs2"}
-                        ];
-
-                        loader = new createjs.LoadQueue(false);
-                        loader.loadManifest(manifast, true, "/assets/");
-                        loader.addEventListener("complete", function(){
-                            initUser( usersInfo );
-                            initGameLoop();
-                        });
-                    }
 
                     function initGameLoop(){
                         createjs.Ticker.frameRate = FPS;
@@ -106,8 +87,7 @@
 
                     function initUser( usersInfo ){
                         for( var i= 0, count = usersInfo.length ; i<count ; i+=1 ){
-                            var character = createUser( usersInfo[ i ], i )
-                            userCharacters.push( character );
+                            userCharacters.push( createUser( usersInfo[ i ], i ) );
                         }
                     }
 
@@ -137,6 +117,38 @@
                         return { sprite:sprite, size:spriteSize, radian:0, length:0,  speed:7 };
                     }
 
+                    function initEnemy(){
+                        for( var i= 0; i<100 ; i+=1 ){
+                            enemyPool.push( createEnemy() );
+                        }
+                    }
+
+                    function createEnemy(){
+                        var spriteSize = 32;
+                        var aniStartIndex = 36;
+                        var moveAni = [ 0, 2, 'move', 0.5 ];
+                        var aniLength = 3;
+                        var aniSpeed = 0.5;
+                        moveAni[ 0 ] = aniStartIndex + ( aniLength*index );
+                        moveAni[ 1 ] = moveAni[ 0 ] + aniLength - 1;
+                        moveAni[ 2 ] = 'move';
+                        moveAni[ 3 ] = aniSpeed;
+                        var spriteSheet = new createjs.SpriteSheet({
+                            images:[loader.getResult("es1")],
+                            frames:{ height: spriteSize, width: spriteSize },
+                            animations:{
+                                move:moveAni
+                            }
+                        });
+                        var sprite = new createjs.Sprite( spriteSheet, 'move' );
+                        var x = ( canvas.width - spriteSize ) * Math.random();
+                        var y = 0;
+                        sprite.x = x;
+                        sprite.y = y;
+                        stage.addChild( sprite );
+                        return { sprite:sprite, size:spriteSize, radian:Math.PI/2, length:1,  speed:2+5*Math.random() };
+                    }
+
                     function update(){
                         for( var i= 0, count = usersInfo.length ; i<count ; i+=1 ){
                             updateUser( usersInfo[ i ], i );
@@ -159,5 +171,5 @@
                     }
                 }
             }
-        });
+        }]);
 }( window.GlobalService );

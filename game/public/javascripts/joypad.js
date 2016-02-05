@@ -77,6 +77,7 @@
 
                     initEvent();
                     updateDisplay();
+                    test();
 
                     function initEvent(){
                         window.addEventListener( 'resize', function(){
@@ -150,6 +151,12 @@
 
                         var position = $lever.position();
                         $lever.data( 'init-position', {x:position.left, y:position.top} );
+                    }
+
+                    function test(){
+                        window.addEventListener( 'keydown', function( event ){
+
+                        });
                     }
                 }
             }
